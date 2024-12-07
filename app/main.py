@@ -16,7 +16,7 @@ app.add_middleware(
 )
 
 # Load the model
-model = joblib.load('app/models/loan_model.joblib')
+model = joblib.load('app/models/loan_type_models.joblib')
 
 @app.get("/")
 def read_root():
