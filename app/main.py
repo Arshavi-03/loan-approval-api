@@ -97,32 +97,31 @@ class LoanPredictor:
         feedback = []
         strengths = []
         improvements = []
-    
+
         # Analyze credit score
         if data.get('credit_score', 0) > 0.5:
             strengths.append("Strong credit score")
         elif data.get('credit_score', 0) < -0.3:
             improvements.append("Consider improving your credit score")
-        
+    
         # Income analysis
         if data.get('income_to_loan', 0) > 0.5:
             strengths.append("Good income to loan ratio")
         elif data.get('income_to_loan', 0) < 0:
             improvements.append("Income might be low relative to requested loan amount")
-        
+    
         # Debt analysis
         if data.get('debt_to_income', 0) < -0.3:
-            trengths.append("Low debt-to-income ratio")
+            strengths.append("Low debt-to-income ratio")
         elif data.get('debt_to_income', 0) > 0.3:
             improvements.append("Consider reducing your debt burden")
-        
+    
         # Loan type specific feedback
         if loan_type == 'student':
             age_value = data.get('person_age', 0)
-            # Convert standardized age to approximate real age
-            approx_age = int(22 + (age_value * 5))  # Rough approximation
+            approx_age = int(22 + (age_value * 5))
         
-            if data.get('education', 0) > 0.5:
+            if data.get('Education', 0) > 0.5:  # Fixed capitalization
                 strengths.append("Strong educational background")
             if approx_age < 22:
                 improvements.append(f"Age ({approx_age} years) is on the lower side for student loans")
@@ -134,7 +133,7 @@ class LoanPredictor:
                 improvements.append("More agricultural experience would strengthen your application")
             if data.get('person_home_ownership', 0) > 0:
                 strengths.append("Property ownership is a positive factor")
-            if data.get('mortgage', 0) < -0.1:
+            if data.get('Mortgage', 0) < -0.1:  # Fixed capitalization
                 strengths.append("Good mortgage history")
             
         elif loan_type == 'business':
@@ -142,19 +141,9 @@ class LoanPredictor:
                 strengths.append("Strong business income")
             if data.get('emp_length', 0) > 0.5:
                 strengths.append("Good business experience")
-            elif data.get('emp_length', 0) < 0:
-                improvements.append("More business experience would strengthen your application")
             if data.get('credit_card_usage', 0) < -0.3:
                 strengths.append("Responsible credit card usage")
-            elif data.get('credit_card_usage', 0) > 0.3:
-                improvements.append("Consider reducing credit card usage")
-    
-        # Analyze loan amount
-        if data.get('loan_amount', 0) < -0.3:
-            strengths.append("Conservative loan request")
-        elif data.get('loan_amount', 0) > 0.3:
-            improvements.append("Consider requesting a lower loan amount")
-    
+
         # Compile final feedback
         if approved:
             feedback.append(f"Congratulations! Your {loan_type} loan application is approved")
@@ -172,12 +161,12 @@ class LoanPredictor:
                 feedback.extend([f"- {s}" for s in improvements])
             if strengths:
                 feedback.append("\nPositive aspects of your application:")
-            feedback.extend([f"- {s}" for s in strengths])
+                feedback.extend([f"- {s}" for s in strengths])
             feedback.append("\nRecommendations:")
             feedback.append("- Consider applying for a lower loan amount")
             feedback.append("- Work on improving the highlighted areas")
             feedback.append("- You may reapply after addressing these factors")
-        
+    
         return feedback
 
 # Initialize predictor
