@@ -28,21 +28,25 @@ class LoanPredictor:
         self.models = model_data
         
     def create_interaction_features(self, X: pd.DataFrame, loan_type: str) -> pd.DataFrame:
+        """Create interaction features matching the trained model"""
         if loan_type == 'student':
             X['score_income_ratio'] = X['credit_score'] * X['annual_income']
-            X['age_education_factor'] = X['person_age'] * X['education']
+            X['age_education_factor'] = X['person_age'] * X['Education']  # Matches training capitalization
             X['debt_income_ratio'] = X['debt_to_income'] / (X['income_to_loan'] + 1)
             X['credit_term_factor'] = X['credit_score'] * X['term']
+        
         elif loan_type == 'agricultural':
-            X['credit_mortgage_ratio'] = X['credit_score'] * X['mortgage']
+            X['credit_mortgage_ratio'] = X['credit_score'] * X['Mortgage']  # Matches training capitalization
             X['income_emp_factor'] = X['annual_income'] * X['emp_length']
             X['debt_asset_ratio'] = X['debt_to_income'] / (X['person_home_ownership'] + 1)
             X['loan_term_factor'] = X['loan_amount'] * X['term']
+        
         elif loan_type == 'business':
             X['credit_card_income'] = X['credit_card_usage'] * X['annual_income']
             X['business_exp_factor'] = X['emp_length'] * X['annual_income']
             X['debt_credit_ratio'] = X['debt_to_income'] / (X['credit_score'] + 1)
-            X['card_util_ratio'] = X['credit_card'] * X['credit_card_usage']
+            X['card_util_ratio'] = X['CreditCard'] * X['credit_card_usage']  # Matches training capitalization
+        
         return X
     
     def predict_loan_approval(self, data: Dict, loan_type: str) -> Dict:
